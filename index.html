@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureVault - Sistema de Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Painel Principal de Login -->
+        <div class="login-panel" id="loginPanel">
+            <div class="brand">
+                <div class="vault-icon">🔐</div>
+                <h1>SecureVault</h1>
+                <p class="tagline">Seu espaço seguro na nuvem</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email ou Usuário</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input 
+                            type="text" 
+                            id="email" 
+                            name="email" 
+                            placeholder="seu@email.com ou usuario123"
+                            autocomplete="username"
+                            required
+                        >
+                        <span class="input-status"></span>
+                    </div>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <!-- Campo de Senha -->
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔑</span>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Digite sua senha"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button type="button" class="toggle-password" id="togglePassword" title="Mostrar/Ocultar senha">
+                            👁️
+                        </button>
+                        <span class="input-status"></span>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <!-- Opções Adicionais -->
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <span>Lembrar de mim</span>
+                    </label>
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+
+                <!-- Barra de Força da Senha -->
+                <div class="password-strength" id="passwordStrength">
+                    <div class="strength-bar"><div class="strength-fill"></div></div>
+                    <span class="strength-text">Força: <span id="strengthLevel">-</span></span>
+                </div>
+
+                <!-- Botão de Login -->
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <span class="btn-text">Entrar</span>
+                    <span class="btn-loader"></span>
+                </button>
+
+                <!-- Mensagem de Erro Geral -->
+                <div class="error-box" id="generalError" style="display: none;">
+                    <span class="error-icon">⚠️</span>
+                    <span id="errorText"></span>
+                </div>
+            </form>
+
+            <!-- Opções de Demonstração -->
+            <div class="demo-section">
+                <p class="demo-title"> Modo Demonstração</p>
+                <div class="demo-accounts">
+                    <button type="button" class="demo-btn" onclick="fillDemo('admin@securevault.com', 'Admin@123')">
+                        Admin
+                    </button>
+                    <button type="button" class="demo-btn" onclick="fillDemo('user@securevault.com', 'User@456')">
+                        Usuário
+                    </button>
+                    <button type="button" class="demo-btn" onclick="fillDemo('dev@securevault.com', 'Dev#789')">
+                        Desenvolvedor
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>Não tem conta? <a href="#" class="signup-link">Crie uma agora</a></p>
+                <div class="security-badges">
+                    <span title="Conexão Segura">🔒 HTTPS</span>
+                    <span title="Criptografia End-to-End">🛡️ E2E</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel de Dashboard (Após Login) -->
+        <div class="dashboard-panel" id="dashboardPanel" style="display: none;">
+            <div class="dashboard-header">
+                <div class="user-greeting">
+                    <h1>Bem-vindo! 👋</h1>
+                    <p id="userDisplayName"></p>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Sair</button>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="welcome-box">
+                    <h2>🎉 Login Realizado com Sucesso!</h2>
+                    <p>Você agora tem acesso aos seus dados e configurações de forma segura.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">📁</span>
+                        <h3>Seus Arquivos</h3>
+                        <p>Acesso seguro aos seus documentos importantes</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">⚙️</span>
+                        <h3>Configurações</h3>
+                        <p>Personalize sua experiência SecureVault</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🔐</span>
+                        <h3>Segurança</h3>
+                        <p>Gerencie suas preferências de segurança</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">👥</span>
+                        <h3>Perfil</h3>
+                        <p>Edite suas informações pessoais</p>
+                    </div>
+                </div>
+
+                <div class="session-info">
+                    <h3>Informações da Sessão</h3>
+                    <ul>
+                        <li><strong>Usuário:</strong> <span id="sessionUser"></span></li>
+                        <li><strong>Login em:</strong> <span id="sessionTime"></span></li>
+                        <li><strong>Status:</strong> <span class="status-badge">✓ Conectado</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificação Toast -->
+        <div class="toast-notification" id="toast" style="display: none;">
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
